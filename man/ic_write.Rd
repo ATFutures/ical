@@ -4,12 +4,16 @@
 \alias{ic_write}
 \title{Write ics file}
 \usage{
-ic_write(ic, file)
+ic_write(ic, file, zulu = FALSE)
 }
 \arguments{
 \item{ic}{object of class \code{ical}}
 
 \item{file}{ics file to write}
+
+\item{zulu}{is the datetime in Zulu time?
+\code{FALSE} by default, which means the calendar's current timezone
+is used.}
 }
 \description{
 Write ics file

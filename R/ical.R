@@ -71,14 +71,17 @@ ic_attributes_vec <- function(
 #' Convert ical object to character strings of attributes
 #'
 #' @param ic object of class `ical`
+#' @param zulu is the datetime in Zulu time?
+#' `FALSE` by default, which means the calendar's current timezone
+#' is used.
 #' @export
 #' @examples
 #' ic <- ical(ical_example)
 #' ic_character(ic)
 #' identical(ical_example, ic_character(ic))
-ic_character <- function(ic) {
+ic_character <- function(ic, zulu = FALSE) {
   char_attributes <- paste(names(attributes(ic)$ical), attributes(ic)$ical, sep = ":")
-  char_events <- ic_char_event(ic)
+  char_events <- ic_char_event(ic, zulu)
   c(char_attributes, char_events, "END:VCALENDAR")
 }
 #' Convert ical object to character strings of events
@@ -89,14 +92,14 @@ ic_character <- function(ic) {
 #' ic <- ical(ical_example)
 #' ic_char_event(ic)
 #' ic_char_event(ic[c(1, 1), ])
-ic_char_event <- function(ic) {
+ic_char_event <- function(ic, zulu = FALSE) {
   date_cols <- grepl(pattern = "VALUE=DATE", x = names(ic))
   if(any(date_cols)) {
     ic[date_cols] <- lapply(ic[, date_cols], ic_char_date)
   }
   datetime_cols <- names(ic) %in% c("DTSTART", "DTEND")
   if(any(datetime_cols)) {
-    ic[datetime_cols] <- lapply(ic[, datetime_cols], ic_char_datetime)
+    ic[datetime_cols] <- lapply(ic[, datetime_cols], ic_char_datetime, zulu)
   }
   char_names <- c(rep(c("BEGIN", names(ic), "END"), nrow(ic)))
   char_contents <-  apply(ic, 1, function(x) c("VEVENT", as.character(x), "VEVENT"))

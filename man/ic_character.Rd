@@ -4,10 +4,14 @@
 \alias{ic_character}
 \title{Convert ical object to character strings of attributes}
 \usage{
-ic_character(ic)
+ic_character(ic, zulu = FALSE)
 }
 \arguments{
 \item{ic}{object of class \code{ical}}
+
+\item{zulu}{is the datetime in Zulu time?
+\code{FALSE} by default, which means the calendar's current timezone
+is used.}
 }
 \description{
 Convert ical object to character strings of attributes

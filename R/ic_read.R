@@ -37,7 +37,11 @@ ic_read <- function(file) {
 #' ic_write(ics_df, file.path(tempdir(), "ic.ics"))
 #' # test similarity between files with diff tool like meld - from shell:
 #' # meld ic.ics inst/extdata/england-and-wales.ics
-ic_write <- function(ic, file) {
-  ic_char <- ic_character(ic)
+ic_write <- function(ic, file, zulu = FALSE) {
+  if (!inherits(ic, "ical")) {
+    warning("Coercing ic to an ical object. Use ical() first to set custom attributes.")
+    ic <- ical(ic)
+  }
+  ic_char <- ic_character(ic, zulu)
   writeLines(ic_char, file)
 }
